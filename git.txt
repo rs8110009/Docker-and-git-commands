@@ -1,0 +1,98 @@
+################## How to install git ##################
+
+for windows
+download git from given link and install it
+https://git-scm.com/
+
+for ubuntu
+apt-get install git 
+
+git --version 										#To check git is installed on our system or not
+git config --global user.name "username"			#set global username
+git config -global user.email "abc@gmail.com"   	#set global email 
+git config --list									#to check configured list
+
+Create a directory where you are working
+
+git init 											# to initialialize that repository
+git status 											# to check the status of local repository
+git add <file name> or *							# * to add all files to track or add specific file name to track specific file
+
+# what is staging area
+Ans:- when file is added for track which is ready for commit. That area is called staging area.
+
+# what is git commit?
+Ans:- A git commit is a command in git that captures a snapshot of project currently staged changes, creating a permanent  record in the  repository history.
+
+git commit -m <some message>						# add your commit message
+git branch 											# to check on which branch you are working
+git log 											# to verify that our commit is executed successfully or not
+git diff											# to compare older and new file what are the changes we made in new files.
+
+
+################### View files from old commits ##########################
+
+# to check old files we need commit id to check it which we can check by "git log" command
+
+git show <commit id>:<file path>					# commit id is your commit id and filename is the path of file which you want to see
+
+
+# how to checkout git old version with git checkout 
+
+git log												# to check the id which you want to get back
+git checkout <git id > -- <file name or *> 			# if you want specific file enter the name of that file or * if want to get all the files.
+git checkout <branch name> -- <file name or *> 		# to checkout latest code on your system
+
+# how to restore changes in file
+
+git restore <* or filename>							# if you want restore all use * or if you want to restore specific file enter file name or . for current file.
+
+# how to restore file from staging area 
+
+git diff --cached									# to check what we make changes in the file
+git restore --staged . 								# to restore file from staging area
+
+
+# when file is added in staging area and also we make changes in that file but i want to commit staged area changes.
+
+git restore --worktree  .							# to restore that file or remove that changes 
+git commit -m <message>								# to commit that file
+
+# how to uncommit a file when we do commit
+
+git reset --hard HEAD^								# to make changes in your current file also and uncommit last version also
+git reset --soft HEAD^								# to make uncommit but not make changes in your current file
+
+########################## Logging in Git ###############################
+
+git log -p -2 										# to check last two commits with difference 
+git log --stat
+git log --pretty=oneline							# show log with commit and commit messages in one line
+git log --pretty=format:"%h - %an, %ar:%s"			# custom format to view logs
+git log -S "<commit message>"						# to check when it is commited
+git log --grep="<pattern>"							# it will find in commit messages
+git log --since="2024-12-01"						# show logs from specific date to current 
+git log --until="2024-08-25"						# will show logs till specific time interval
+git log --author="<author name>" 					# will show log from specific author
+
+######################## Working with remote repositories #####################
+
+git remote add origin <url or your repository> 				# to add repository on local system  
+git branch -M main											# -M stands for move to main branch
+git push -u origin main										# to push code on main branch
+
+make some changes in file and commit that file on local repo
+
+git push													# to push that file on remote repository
+git remote 													# to verfiy out repo is linked with reomte or not
+git remote -v 												# to check the remote repos in details on which repository we are fetching or pushing
+
+git pull 													# to download the changes from remote repository to local
+
+
+############################# Branching and Merging ###############################
+
+git branch 	 												# to check on which branch we are						
+git branch <branch name>									# to create new branch
+git branch -r 												# to check remote branch
+git branch -a 												# to check local as well as remote branch
