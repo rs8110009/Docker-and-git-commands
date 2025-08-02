@@ -1,0 +1,65 @@
+############################ Docker Basic Commands ################################
+
+1) docker --version 						(show docker version)
+2) docker info							(display system wide information)
+3) docker help 							(Show help on docker commands)
+
+############################# Commands Inspect of Container ############################
+
+1) docker ps							(show all the running containers)
+2) docker ps -a 						(show all the containers running as well as stopped and exited containers)
+3) docker container ls 						(show all the running containers)
+4) docker container ls -a					(show all the containers running as well as stopped and exited containers)
+5) docker inspect <container name>				(Show mounts, ip etc)
+6) docker logs <container name>					(shown logs of given container)
+7) docker top 							(show running process in container)
+8) docker stats							(show resources utilization by docker)
+9) docker port <container>					(show port mapping of container)
+
+########################## Container lifecycle ################################
+
+1) docker run <image>						Create and start a new container
+2) docker start <container>					Start a stopped container
+3) docker stop <container>					Gracefully stop a container
+4) docker restart <container>					Restart a container
+5) docker pause <container>					Pause all processes in the container
+6) docker unpause <container>					Resume a paused container
+7) docker kill <container>					Forcefully stop a container
+8) docker rm <container>					Remove a stopped container
+9) docker container prune					Remove all stopped containers
+
+
+
+###################### Advance Commands related to docker ##############################
+
+1) docker exec -it <container> bash				Run a command (e.g., open a shell) inside a ru
+2) docker attach <container>					Attach to the running process (like foreground mode)
+3) docker cp <container>:<path> <host_path>			Copy files from container to host
+4) docker cp <host_path> <container>:<path>			Copy files to container
+5) docker run -p 3000:3000	<container name>		to bind port on server and container
+6) docker rename <old> <new>					Rename a container
+7) docker login 						to login on dockerhub on terminal
+8) docker push <image id>					to push docker image on docker repository
+9) docker run -v <host_path>:<container_path> <image>		Mount a volume
+10) docker run --name -d --rm					--name to give name to container, -d to run in background, --rm to remove container when it stopped
+11) docker restart <container_name> 				Restart container
+12) docker build -t <image name>:01				-t means to assign tag name and 01 is the version of that image 
+
+########################### Volume and Network Commands ############################### 
+
+1) docker volume create <name>					To create volume
+2) docker volume ls						List volumes
+3) docker volume rm <name>					Remove volume
+4) docker network ls 						List network
+5) docker network create <name>					To create Network
+6) docker network connect <network> <container>			To connect Network
+
+########################## Clean Up Unused Images, containers, volumes and unused data ###########################
+
+1) docker system prune 	`					Remove all unused data
+2) docker image prune						Remove unused images
+3) docker container prune 					Remove stopped containers
+4) docker volume prune 						Remove unused volumes
+
+#############################################################################################################################
+#############################################################################################################################                                                    
