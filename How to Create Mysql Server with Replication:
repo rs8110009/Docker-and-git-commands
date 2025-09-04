@@ -1,0 +1,42 @@
+How to Create Mysql Server with Replication:
+
+1) Install mysql on two servers or create two containers of mysql of same version.
+2) One is master and other is slave (Replica).
+3) Login to master mysql-server.
+4) vim /etc/mysql/conf.d/master.cnf
+5)  [mysqld]
+	server-id=1
+	log_bin=mysql-bin
+	binlog_do_db=mydb   # optional: replicate only this DB if you want all comment this line
+5) save and quit.
+6) Login to slave mysql-server.
+7) vim /etc/mysql/conf.d/slave.conf
+8) [mysqld]
+	server-id=2
+	relay-log=relay-log
+9) save and quit
+10) Restart both container or mysql-server
+
+11) login to slave system and use the following configuration
+CREATE USER 'replica'@'%' IDENTIFIED BY 'Pass@1234';
+GRANT REPLICATION SLAVE ON *.* TO 'replica'@'%';
+FLUSH PRIVILEGES;
+SHOW MASTER STATUS;
+
+12) Now login to  slave system and add the folowing configuration.
+CHANGE MASTER TO
+  MASTER_HOST='master',
+  MASTER_USER='replica',
+  MASTER_PASSWORD='Pass@1234',
+  MASTER_LOG_FILE='mysql-bin.000001',
+  MASTER_LOG_POS=154;
+
+START SLAVE;
+
+13) show slave status\G
+Slave_IO_Running: Yes
+Slave_SQL_Running: Yes
+Seconds_Behind_Master: 0
+
+14) if you getting same that means config done.
+
