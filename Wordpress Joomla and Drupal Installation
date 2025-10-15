@@ -1,0 +1,54 @@
+######################################## Wordpress Installation on Ubuntu ####################################################
+
+I1)  sudo apt-get install apache2
+
+2) sudo apt-get install mysql-server
+
+3) sudo apt install php8.4 php8.4-cli php8.4-common php8.4-mysql php8.4-curl php8.4-gd php8.4-mbstring php8.4-xml php8.4-xmlrpc php8.4-soap php8.4-intl php8.4-zip libapache2-mod-php8.4 -y
+
+4) if you are using multiple vesions of php and want to use wordpress in specific version use the following commands:
+ sudo a2dismod php7.4      # skip if you don't have older versions
+sudo a2enmod php8.4
+sudo systemctl restart apache2
+
+5) sudo chown -R www-data:www-data /var/www/html/*
+
+6) sudo chmod -R 755 /var/www/html/*
+
+7) sudo a2enmod rewrite
+
+8) sudo systemctl restart apache2
+
+9) sudo vim /etc/apache2/sites-available/wordpress.conf
+
+<VirtualHost *:80>
+    ServerAdmin admin@wordpress.local
+    ServerName wordpress.local
+    DocumentRoot /var/www/html/wordpress
+
+    <Directory /var/www/html/wordpress>
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/wordpress_error.log
+    CustomLog ${APACHE_LOG_DIR}/wordpress_access.log combined
+</VirtualHost>
+
+10) sudo a2ensite wordpress.conf
+
+11) sudo systemctl restart apache2
+
+12) sudo vim /etc/hosts
+
+13) 127.0.0.1 wordpress.local 
+
+14) Save and quit it 
+
+15) Install wordpress from http://wordpress.local
+
+16) Enter the credentails as you configured in your mysql-server.
+
+
+################################################################################################################

@@ -1,0 +1,57 @@
+
+############################################ Installing Mysql-Server ################################################
+
+
+1) sudo apt update
+2) sudo apt install mysql-server
+3) sudo systemctl enable mysql.service && systemctl start mysql.service				# to enable and start mysql-service
+4) sudo mysql -u root -p 																# when you execute it, it will prompt for password, the password you enter it will set it for root login.
+5) create user 'test'@'localhost' identified by 'Pass@1234';								# create test user and set it password Pass@1234
+6) grant all privileges on *.* to 'test'@'localhost';										# it grant all privileges to test user
+7) flush privileges; 																	# this query refresh database
+8) Drop user 'username'@'localhost';													# to delete user in mysql
+9) select user,host from mysql.user;													# to check all the users with their hostnames
+10) show grants for 'admin'@'localhost';												# to check the privileges of specific users
+11) grant all privileges on db.* to 'test'@'localhost';									# to grant privileges on specific database to a user
+
+ * HOW TO TAKE BACKUP FROM A DATABASE *
+ 
+1) mysqldump -u test -p database_name > database_name.sql							# it prompt for password when you fill it will take backup of mentioned database in given file.
+ 2) mysqldumpp -u test -p database_name table_name > table_name.sql 				# to take backup of specific table use this command.
+3) mysqldump -u test -p database_name < database_name.sql							# it prompt for password when you fill it will import backup of mentioned database in given file.
+4) mysqldumpp -u test -p database_name < table_name.sql 					              # to import backup of specific table use this command.
+
+* HOW TO CHANGE PASSWORD OF A USER *
+12) sudo mysql -u root -p 						        		     # firstly login with root user
+13) alter user 'username'@'localhost' identified by 'Passowrd';         # to change password use this command.
+14) flush privileges;											     # to refresh privileges run this
+15) quit it
+
+
+############################################## Installing mongodb server ##############################################
+
+
+1) wget -qO - https://www.mongodb.org/static/pgp/server-7.0.asc | sudo gpg --dearmor -o /usr/share/keyrings/mongodb-archive-keyring.gpg    # to add mongo gpg-key 
+2) echo "deb [ signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list   							                       # to add mongodb repository in local system  Note:// if you are not using 22.04 chnage jammy to your os name .
+3) sudo apt update 						                       # to update repository run this command.
+4) sudo apt install mongodb-org -y		                       # Install mongodb on system.
+5) sudo systemctl start mongod                                        # to start mongodb service
+6) sudo systemctl enable mongod		                        	   # to start when system restarted
+7) sudo systemctl status mongod                                      # checked status of mongodb service
+8) sudo nano /etc/mongod.conf
+9) bindIp: 0.0.0.0                                                               # allow all IPs, or specify your server IPs
+10) sudo systemctl restart mongod                                    # to update changes in config file restart mongod service
+11) vim /etc/mongod.conf				                        # search for security and uncomment it and add the below text
+security
+     authorization: "enabled"
+12) open terminal and type monosh		                        # it will opened in mongo shell.
+13) use admin							                        # use admin is special databse when user created in that user having all permissions
+  db.createUser({
+  user: "root",
+  pwd: "yourStrongPassword",
+  roles: [ { role: "root", db: "admin" } ]
+})
+14) mongodump --username root --password 'password' --authenticationDatabase admin --db mydb --out /backup/path    #to take backup of a database
+
+
+

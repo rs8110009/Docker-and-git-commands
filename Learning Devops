@@ -1,0 +1,71 @@
+
+
+**************************************************************************** Networking Commands in Linux *****************************************************************************************
+
+
+Basic Network Information Commands
+
+i) ifconfig
+ii) ip a
+iii) hostname -I  
+iv) nmcli 
+v) nmtui
+
+Network Configuration 
+
+i) graphical method
+ii) nmtui
+iii) nmcli
+
+Connectivity testing
+
+i) curl
+ii) ping
+iii) telnet
+
+Dns and Name Resolution
+
+i) nslookup
+ii) dig
+iii) host
+
+Network Diagnostics and Monitoring
+
+i) netstat -tulnp 
+ii) ss -tuln
+iii) lsof -i 
+
+Advance Networking 
+
+i) ufw status  			used in debian
+ii) firewall-cmd 		used in RPM based os
+iii) nethog 			tool used to check the bandwidth utilization. 
+
+Daemon Service for network
+
+i) systemctl status NetworkManager
+
+
+***************************************************************************	 Proxy Server in Linux ***********************************************************************************************************
+
+A proxy Server is an intemediate between a client and Internet.
+In simple terms:  we send request to the proxy > proxy sends it to the destination (Website) > Recieves the response and send back to us.
+
+Why we use proxy server?
+
+i) Privacy: Hides Our Real IP from website, website see the proxy ip not our server IP.
+ii) Access Control: Used by Organization to restrict or allow internet access for certain users or sites.
+iii) Caching: Stores copies of frequently accessed web content to improve load time and reduce bandwidth usage.
+iv) Security: filters traffic, blocks malicious sites, and can log user activity.
+v) By Pass Geo Restrications: Let you access content that's blocked in your country by using proxy in another region.
+
+Types of Proxy Servers:
+
+i) Forward Proxy: sites between internal users and internet.
+ii) Reverse Proxy: Sites in front of webservers- handles requests from users before they reach the backend server. Often used for load  balancing and security.
+iii) Transparent Proxy: Users are not aware they are using proxy, commonly used by ISP  or companies for monitoring
+iv) Hide Anonymility proxy:  Hides both your IP  and the fact that proxy is being used.
+v) Socks  proxy: works at lower level - forward any kind of traffic (HTTP, FTP, etc) without understanding the protocol 
+
+
+******************************************************************

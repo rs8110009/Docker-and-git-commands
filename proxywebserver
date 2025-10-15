@@ -1,0 +1,132 @@
+How to configure Forward Proxy Server with apache2
+
+1)  Confiure your webserver.
+2) install apache or nginx webserver on that server which you want to cofigure as proxy webserver.
+3) Install the follwing modules and enable it.
+    a2enmod proxy proxy_http proxy_balancer lbmethod_byrequests ssl headers rewrite auth_basic
+
+4) Create a virtualhost file in vim /etc/apache2/site-available/proxy.conf.
+5) paste the following configuration in that virtualhost file.
+
+# ===============================================
+# Apache Proxy + Load Balancer + HTTPS + Auth
+# ===============================================
+
+# Load balancing cluster definition
+<Proxy "balancer://mycluster">
+    BalancerMember http://webserver1:80
+    BalancerMember http://webserver2:80
+    ProxySet lbmethod=byrequests
+</Proxy>
+
+# -------------------------
+# HTTP VirtualHost
+# -------------------------
+<VirtualHost *:80>
+    ServerName proxy.example.com
+
+    # Redirect all HTTP to HTTPS
+    RewriteEngine On
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}$1 [R=301,L]
+</VirtualHost>
+
+# -------------------------
+# HTTPS VirtualHost
+# -------------------------
+<VirtualHost *:443>
+    ServerName proxy.example.com
+
+    SSLEngine on
+    SSLCertificateFile /etc/ssl/certs/proxy.crt
+    SSLCertificateKeyFile /etc/ssl/private/proxy.key
+
+    # Preserve client hostname
+    ProxyPreserveHost On
+    ProxyRequests Off
+
+    # Use the load balancer cluster
+    ProxyPass / balancer://mycluster/
+    ProxyPassReverse / balancer://mycluster/
+
+    # Authentication
+    <Location />
+        AuthType Basic
+        AuthName "Restricted Access"
+        AuthUserFile /etc/apache2/.htpasswd
+        Require valid-user
+    </Location>
+
+    # Security headers
+    Header always set X-Frame-Options "DENY"
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-XSS-Protection "1; mode=block"
+
+    # Logging
+    ErrorLog ${APACHE_LOG_DIR}/proxy_error.log
+    CustomLog ${APACHE_LOG_DIR}/proxy_access.log combined
+</VirtualHost>
+6) Save and quit.
+7) Run apachectl -t to check all the configuration are fine.
+8) When everything fine, Run systemctl restart apache2.
+9) Now open your browser and check it.
+# Note: Both the containers are running in same network
+
+
+
+************************************************************************************************************************************************************
+
+proxy server configuration for nginx 
+
+************************************************************************************************************************************************************
+
+
+# Define cache storage
+proxy_cache_path /var/cache/nginx levels=1:2 keys_zone=my_cache:10m
+                 max_size=1g inactive=60m use_temp_path=off;
+
+# Define upstream (load balancing group)
+upstream backend_cluster {
+    server app1:8080;
+    server app2:8080;
+}
+
+# Redirect HTTP → HTTPS
+server {
+    listen 80;
+    server_name example.com;
+    return 301 https://$host$request_uri;
+}
+
+# HTTPS reverse proxy
+server {
+    listen 443 ssl;
+    server_name example.com;
+
+    ssl_certificate /etc/nginx/ssl/example.crt;
+    ssl_certificate_key /etc/nginx/ssl/example.key;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+
+    # Enable Gzip compression
+    gzip on;
+    gzip_types text/plain text/css application/json application/javascript;
+
+    location / {
+        proxy_pass http://backend_cluster;
+        proxy_cache my_cache;
+        proxy_cache_valid 200 302 10m;
+        proxy_cache_valid 404 1m;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        add_header X-Cache-Status $upstream_cache_status;
+    }
+}
+
+*****************************************************************************************************************************************************************************
+*****************************************************************************************************************************************************************************
+
+
+
+
